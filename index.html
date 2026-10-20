@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusEvent - Sistem Informasi Kegiatan dan Event Kampus</title>
+  <!-- Font Google Poppins & Font Awesome CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    <div class="container">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><strong>PERHATIAN:</strong> Website ini merupakan sistem demonstrasi/simulasi tanpa database dan backend. Seluruh data event dan pendaftaran tersimpan secara lokal di browser Anda.</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="navbar-wrapper">
+    <div class="container navbar">
+      <a href="#beranda" class="logo" onclick="navigateTo('beranda')">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Campus<span class="logo-accent">Event</span></span>
+      </a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-links" id="nav-links">
+        <a href="#beranda" class="nav-item active" onclick="navigateTo('beranda')"><i class="fa-solid fa-house"></i> Beranda</a>
+        <a href="#daftar-event" class="nav-item" onclick="navigateTo('daftar-event')"><i class="fa-solid fa-calendar-days"></i> Daftar Event</a>
+        <a href="#pendaftaran" class="nav-item" onclick="navigateTo('pendaftaran')"><i class="fa-solid fa-pen-to-square"></i> Pendaftaran Event</a>
+        <a href="#event-saya" class="nav-item" onclick="navigateTo('event-saya')"><i class="fa-solid fa-ticket"></i> Event Saya <span class="badge-count" id="my-events-badge">0</span></a>
+        <a href="#tentang" class="nav-item" onclick="navigateTo('tentang')"><i class="fa-solid fa-circle-info"></i> Tentang</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- SECTION 1: BERANDA -->
+    <section id="beranda" class="page-section active">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="container hero-grid">
+          <div class="hero-content">
+            <span class="badge-hero"><i class="fa-solid fa-sparkles"></i> Portal Event Mahasiswa Terlengkap</span>
+            <h1>Temukan Event Kampusmu, <span>Kembangkan Potensimu</span></h1>
+            <p>Jelajahi berbagai seminar nasional, workshop skill, kompetisi, dan kegiatan organisasi mahasiswa. Mari tingkatkan soft skill dan jaringan profesionalmu sekarang!</p>
+            <div class="hero-btns">
+              <button class="btn btn-primary" onclick="navigateTo('daftar-event')"><i class="fa-solid fa-compass"></i> Jelajahi Event</button>
+              <button class="btn btn-outline" onclick="quickFilterStatus('Mendatang')"><i class="fa-regular fa-clock"></i> Event Mendatang</button>
+            </div>
+          </div>
+          <div class="hero-image">
+            <div class="hero-card-img">
+              <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80" alt="Kegiatan Kampus">
+              <div class="floating-badge">
+                <i class="fa-solid fa-trophy"></i>
+                <div>
+                  <strong>Ajang Prestasi</strong>
+                  <span>Kembangkan Potensi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistik Ringkasan -->
+      <div class="stats-section">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon purple"><i class="fa-solid fa-calendar-check"></i></div>
+              <div class="stat-info">
+                <h3 id="stat-total-events">0</h3>
+                <p>Total Event</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+              <div class="stat-info">
+                <h3 id="stat-upcoming-events">0</h3>
+                <p>Event Mendatang</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i class="fa-solid fa-door-open"></i></div>
+              <div class="stat-info">
+                <h3 id="stat-open-events">0</h3>
+                <p>Pendaftaran Dibuka</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon lavender"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="stat-info">
+                <h3 id="stat-categories">0</h3>
+                <p>Kategori Kegiatan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kategori Quick Filter -->
+      <div class="container section-margin">
+        <div class="section-header">
+          <h2>Kategori Kegiatan</h2>
+          <p>Pilih kategori yang paling sesuai dengan minat dan kebutuhan akademikmu</p>
+        </div>
+        <div class="category-grid" id="category-grid-home">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Event Terbaru / Pilihan -->
+      <div class="container section-margin">
+        <div class="section-header flex-header">
+          <div>
+            <h2>Event Pilihan Terbaru</h2>
+            <p>Jangan lewatkan pendaftaran kegiatan menarik yang paling banyak diminati</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="navigateTo('daftar-event')">Lihat Semua Event <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="events-grid" id="featured-events-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: DAFTAR EVENT -->
+    <section id="daftar-event" class="page-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2>Daftar Seluruh Event Kampus</h2>
+          <p>Gunakan pencarian dan filter untuk menemukan kegiatan yang sesuai dengan jadwalmu</p>
+        </div>
+
+        <!-- Filter & Search Bar Controls -->
+        <div class="filter-wrapper">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="Cari event berdasarkan judul, lokasi, atau deskripsi..." oninput="handleSearchFilter()">
+          </div>
+          <div class="filter-controls">
+            <div class="select-group">
+              <label for="category-filter"><i class="fa-solid fa-filter"></i> Kategori:</label>
+              <select id="category-filter" onchange="handleSearchFilter()">
+                <option value="ALL">Semua Kategori</option>
+                <!-- JS Options -->
+              </select>
+            </div>
+            <div class="select-group">
+              <label for="status-filter"><i class="fa-solid fa-list-check"></i> Status:</label>
+              <select id="status-filter" onchange="handleSearchFilter()">
+                <option value="ALL">Semua Status</option>
+                <option value="Buka">Pendaftaran Dibuka</option>
+                <option value="Mendatang">Event Mendatang</option>
+                <option value="Selesai">Event Selesai</option>
+              </select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filter</button>
+          </div>
+        </div>
+
+        <!-- Status Active Result Text -->
+        <div class="filter-result-info">
+          <span>Menampilkan <strong id="result-count">0</strong> event</span>
+        </div>
+
+        <!-- Events Container -->
+        <div class="events-grid" id="all-events-container">
+          <!-- Dynamic cards -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="no-events-found" class="empty-state hidden">
+          <i class="fa-solid fa-calendar-xmark"></i>
+          <h3>Tidak Ada Event Ditemukan</h3>
+          <p>Coba gunakan kata kunci pencarian lain atau ubah kombinasi filter Anda.</p>
+          <button class="btn btn-primary" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filter</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PENDAFTARAN EVENT -->
+    <section id="pendaftaran" class="page-section">
+      <div class="container">
+        <div class="form-wrapper">
+          <div class="form-header">
+            <h2><i class="fa-solid fa-file-pen"></i> Form Simulasi Pendaftaran Event</h2>
+            <p>Isi formulir di bawah ini untuk mensimulasikan pendaftaran event yang ingin kamu ikuti.</p>
+          </div>
+          
+          <form id="registration-form" onsubmit="handleRegistrationSubmit(event)">
+            <div class="form-group">
+              <label for="reg-event-select"><i class="fa-solid fa-calendar-day"></i> Pilih Event <span class="required">*</span></label>
+              <select id="reg-event-select" required onchange="updateSelectedEventSummary()">
+                <option value="" disabled selected>-- Pilih Event Kegiatan --</option>
+                <!-- Dynamically filled with active events -->
+              </select>
+            </div>
+
+            <!-- Event Preview Box in Form -->
+            <div id="event-summary-box" class="event-summary-box hidden">
+              <div class="summary-details">
+                <strong id="sum-title">Judul Event</strong>
+                <p><i class="fa-regular fa-calendar"></i> <span id="sum-date">-</span> | <i class="fa-solid fa-location-dot"></i> <span id="sum-location">-</span></p>
+                <p><i class="fa-solid fa-users"></i> Sisa Kuota: <span id="sum-quota">-</span></p>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-fullname"><i class="fa-solid fa-user"></i> Nama Lengkap <span class="required">*</span></label>
+                <input type="text" id="reg-fullname" placeholder="Contoh: Budi Santoso" required>
+              </div>
+              <div class="form-group">
+                <label for="reg-nim"><i class="fa-solid fa-id-card"></i> Nomor Induk Mahasiswa (NIM) <span class="required">*</span></label>
+                <input type="text" id="reg-nim" placeholder="Contoh: 210101234" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-prodi"><i class="fa-solid fa-graduation-cap"></i> Program Studi <span class="required">*</span></label>
+                <input type="text" id="reg-prodi" placeholder="Contoh: Teknik Informatika" required>
+              </div>
+              <div class="form-group">
+                <label for="reg-email"><i class="fa-solid fa-envelope"></i> Email Aktif <span class="required">*</span></label>
+                <input type="email" id="reg-email" placeholder="Contoh: budi@student.ac.id" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-whatsapp"><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp <span class="required">*</span></label>
+              <input type="tel" id="reg-whatsapp" placeholder="Contoh: 081234567890" required>
+            </div>
+
+            <div class="disclaimer-form">
+              <i class="fa-solid fa-circle-info"></i>
+              <p>Simulasi ini akan menyimpan data tiket registrasi Anda di penyimpanan lokal browser (localStorage). Tidak ada data yang dikirimkan ke server resmi mana pun.</p>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline" onclick="resetForm()"><i class="fa-solid fa-xmark"></i> Bersihkan Form</button>
+              <button type="submit" class="btn btn-orange"><i class="fa-solid fa-paper-plane"></i> Konfirmasi Pendaftaran</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: EVENT SAYA -->
+    <section id="event-saya" class="page-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2><i class="fa-solid fa-ticket"></i> Daftar Event Yang Pernah Didatangi/Didaftarkan</h2>
+          <p>Berikut adalah riwayat simulasi pendaftaran event yang tersimpan di browser Anda</p>
+        </div>
+
+        <div id="my-events-list" class="my-events-grid">
+          <!-- Filled dynamically -->
+        </div>
+
+        <!-- Empty state my events -->
+        <div id="no-my-events" class="empty-state">
+          <i class="fa-solid fa-ticket-simple"></i>
+          <h3>Belum Ada Event Yang Didaftarkan</h3>
+          <p>Anda belum mendaftar ke kegiatan mana pun. Silakan jelajahi event dan daftarkan diri Anda.</p>
+          <button class="btn btn-primary" onclick="navigateTo('daftar-event')"><i class="fa-solid fa-compass"></i> Cari Event Sekarang</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: TENTANG -->
+    <section id="tentang" class="page-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-card">
+            <h2><i class="fa-solid fa-graduation-cap"></i> Tentang CampusEvent</h2>
+            <p><strong>CampusEvent</strong> merupakan platform Sistem Informasi Kegiatan dan Event Kampus yang dirancang khusus untuk membantu mahasiswa dalam menemukan, mengikuti, dan mengelola partisipasi pada berbagai acara ilmiah, akademik, seni, dan pengembangan diri.</p>
+            <p>Sistem ini memberikan aksesibilitas informasi terpusat agar mahasiswa tidak lagi ketinggalan pengumuman webinar, seminar nasional, pendaftaran lomba, hingga kegiatan bakti sosial di lingkungan kampus.</p>
+            
+            <div class="about-features">
+              <div class="feat-item">
+                <i class="fa-solid fa-bullseye"></i>
+                <div>
+                  <h4>Tujuan Utama</h4>
+                  <p>Memudahkan penyebaran informasi secara transparan, modern, dan dapat diakses kapan saja oleh mahasiswa dari seluruh departemen.</p>
+                </div>
+              </div>
+              <div class="feat-item">
+                <i class="fa-solid fa-face-smile"></i>
+                <div>
+                  <h4>Manfaat Mahasiswa</h4>
+                  <p>Mempermudah pemilihan kegiatan pendukung karir, membantu melengkapi portofolio, serta memudahkan penyimpanan tiket pendaftaran simulasi secara mandiri.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-card side-info">
+            <h3><i class="fa-solid fa-address-book"></i> Kontak Informasi Simulasi</h3>
+            <p>Jika ada pertanyaan atau koordinasi terkait simulasi sistem platform ini:</p>
+            
+            <ul class="contact-list">
+              <li><i class="fa-solid fa-building"></i> Sekretariat BEM / Pusat Informasi Kampus</li>
+              <li><i class="fa-solid fa-envelope"></i> support@campusevent-demo.ac.id</li>
+              <li><i class="fa-solid fa-phone"></i> (021) 555-0199 / 0812-9988-7766</li>
+              <li><i class="fa-solid fa-location-dot"></i> Gedung Student Center Lantai 2, Kampus Utama</li>
+            </ul>
+
+            <div class="system-spec">
+              <h4>Spesifikasi Sistem</h4>
+              <ul>
+                <li><i class="fa-solid fa-check text-green"></i> HTML5, CSS3 Custom Variables, Pure JS</li>
+                <li><i class="fa-solid fa-check text-green"></i> Zero External Backend / Client-side Storage</li>
+                <li><i class="fa-solid fa-check text-green"></i> Responsive Multi-device Ready</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DETAIL EVENT -->
+  <div id="event-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeEventModal()">&times;</button>
+      <div class="modal-body" id="modal-detail-body">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <a href="#beranda" class="logo" onclick="navigateTo('beranda')">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Campus<span class="logo-accent">Event</span></span>
+        </a>
+        <p>Sistem Informasi Kegiatan dan Event Kampus terlengkap & terkini.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi Pintar</h4>
+        <ul>
+          <li><a href="#beranda" onclick="navigateTo('beranda')">Beranda</a></li>
+          <li><a href="#daftar-event" onclick="navigateTo('daftar-event')">Daftar Event</a></li>
+          <li><a href="#pendaftaran" onclick="navigateTo('pendaftaran')">Form Pendaftaran</a></li>
+          <li><a href="#event-saya" onclick="navigateTo('event-saya')">Event Saya</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Media Sosial</h4>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container text-center">
+        <p>&copy; 2026 CampusEvent — Sistem Informasi Kegiatan dan Event Kampus. Dikembangkan menggunakan HTML, CSS, & Vanilla JavaScript.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
