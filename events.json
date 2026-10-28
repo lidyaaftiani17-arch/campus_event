@@ -1,0 +1,64 @@
+// Konfigurasi Firebase Asli Milik Proyek CampusEvent
+const firebaseConfig = {
+  apiKey: "AIzaSyDeSXo3vdJNCtUgmUEqZXAOvmqHA2THdc",
+  authDomain: "campusevent-48e64.firebaseapp.com",
+  databaseURL: "https://campusevent-48e64-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "campusevent-48e64",
+  storageBucket: "campusevent-48e64.firebasestorage.app",
+  messagingSenderId: "145079789035",
+  appId: "1:145079789035:web:47b22f08059018aaaae5ae",
+  measurementId: "G-GDWH7F7MX7"
+};
+
+// Inisialisasi Firebase & Realtime Database
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+{
+  "events": {
+    "event_01": {
+      "id": 1,
+      "title": "Seminar Nasional Teknologi Digital",
+      "category": "Seminar",
+      "date": "2026-04-15",
+      "time": "08:30 - 12:30 WIB",
+      "location": "Aula Utama Kampus",
+      "organizer": "Himpunan Mahasiswa Teknologi Informasi",
+      "description": "Seminar mengenai perkembangan teknologi digital, kecerdasan buatan, dan pemanfaatan teknologi dalam dunia kerja terkini.",
+      "quota": "150 peserta",
+      "deadline": "2026-04-10",
+      "status": "Buka",
+      "requirements": "Mahasiswa aktif semua jurusan, membawa kartu mahasiswa.",
+      "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80"
+    },
+    "event_02": {
+      "id": 2,
+      "title": "Workshop UI/UX Design",
+      "category": "Workshop",
+      "date": "2026-04-20",
+      "time": "09:00 - 15:00 WIB",
+      "location": "Laboratorium Komputer 3",
+      "organizer": "Komunitas Desain Digital Mahasiswa",
+      "description": "Workshop untuk mahasiswa yang ingin mempelajari dasar desain antarmuka, pengalaman pengguna, pembuatan wireframe, dan prototipe.",
+      "quota": "50 peserta",
+      "deadline": "2026-04-18",
+      "status": "Buka",
+      "requirements": "Membawa laptop pribadi yang sudah terpasang aplikasi Figma.",
+      "image": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80"
+    },
+    "event_03": {
+      "id": 3,
+      "title": "Lomba Inovasi Mahasiswa",
+      "category": "Lomba",
+      "date": "2026-05-10",
+      "time": "08:00 - 17:00 WIB",
+      "location": "Gedung Kegiatan Mahasiswa",
+      "organizer": "Badan Eksekutif Mahasiswa (BEM)",
+      "description": "Kompetisi yang memberikan kesempatan kepada mahasiswa untuk mempresentasikan ide kreatif dan inovasi yang bermanfaat bagi masyarakat.",
+      "quota": "30 tim",
+      "deadline": "2026-05-01",
+      "status": "Mendatang",
+      "requirements": "Satu tim terdiri dari 3 orang mahasiswa dari perguruan tinggi yang sama.",
+      "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80"
+    }
+  }
+}
